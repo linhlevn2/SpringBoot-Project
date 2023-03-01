@@ -9,15 +9,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name="food_cost")
 public class FoodCost {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-
+    private Integer date;
     private Integer boh_food_cost;
     private Integer foh_food_cost;
-    private Integer date;
 
     public FoodCost(){}
 
