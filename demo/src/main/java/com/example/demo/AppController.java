@@ -5,8 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import org.springframework.ui.Model;
 
@@ -14,7 +14,11 @@ import org.springframework.ui.Model;
 @Controller
 public class AppController{
     @Autowired
-    private CostRepository costRepository;
+    private FoodCostRepository foodcostRepository;
+    @Autowired
+    private LaborCostRepository laborcostRepository;
+    @Autowired
+    private ExpenseRepository expenseRepository;
     
     @GetMapping(path="/home")
     public String home() {
@@ -22,45 +26,46 @@ public class AppController{
     }
     
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<FoodCost> getAllFoodCost(){
-      return costRepository.findAll();
+    @RequestMapping(value="/all", method = RequestMethod.GET)
+    public String viewAllCost(Model model){
+      Iterable<FoodCost> foodcost = foodcostRepository.findAll();
+      model.addAttribute("foodcost", foodcost);
+      return "index";
     }
 
-    @GetMapping(path="/addCost")
-    public String addFoodCostForm(Model model){
+    @GetMapping(path="/insertCost")
+    public String addCostForm(Model model){
       model.addAttribute("foodcost", new FoodCost());
-      return "addCost";
+      model.addAttribute("laborcost", new LaborCost());
+      model.addAttribute("expense", new Expense());
+      return "insertCost";
     }
     
-    @PostMapping(path="/addCost")
-    public @ResponseBody String add(@ModelAttribute FoodCost foodcost, Model model){
-      System.out.println(foodcost.getBohCost()+"-boh "+ foodcost.getFohCost()+"-foh "+foodcost.getDate());
-      FoodCost foodcost_inserted = costRepository.save(foodcost);
+    @PostMapping(path="/insertFoodCost")
+    public String add(@ModelAttribute FoodCost foodcost, Model model){
+      FoodCost foodcost_inserted = foodcostRepository.save(foodcost);
       model.addAttribute("boh_food_cost", foodcost_inserted.getBohCost());
       model.addAttribute("foh_food_cost", foodcost_inserted.getFohCost());
       return "result";
     }
+    
+    @PostMapping(path="/insertLaborCost")
+    public String add(@ModelAttribute LaborCost laborcost, Model model){
+      LaborCost laborcost_inserted = laborcostRepository.save(laborcost);
+      model.addAttribute("boh_labor_cost", laborcost_inserted.getBohCost());
+      model.addAttribute("foh_labor_cost", laborcost_inserted.getFohCost());
+      return "result";
+    }
+
+    @PostMapping(path="/insertExpense")
+    public String add(@ModelAttribute Expense expense, Model model){
+      Expense expense_inserted = expenseRepository.save(expense);
+      model.addAttribute("utility", expense_inserted.getUtility());
+      model.addAttribute("rent", expense_inserted.getRent());
+      return "result";
+    }
+
     /* 
-    @PostMapping(path="/create")
-    public String addFoodCost (@ModelAttribute FoodCost foodcost, Model model){
-      model.addAttribute("foodcost", foodcost);
-      costRepository.save(foodcost);
-      return "createResult";
-    }
-    
-
-     
-    @GetMapping("/show")
-    public @ResponseBody Iterable<FoodCost> getAllCost(){
-      return costRespository.findAll();
-    }
-
-    @PostMapping("/create")
-    public FoodCost create(@RequestBody FoodCost cost){
-      return costRespository.save(cost);
-    }
-
-    
     @PutMapping("/update")
     public FoodCost update(@PathVariable String date, @RequestBody Map<Integer,Integer> body){
       FoodCost cost = costRespository.findOne(date);
