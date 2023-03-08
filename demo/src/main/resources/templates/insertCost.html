@@ -12,11 +12,10 @@
         </nav>
         <h2>Food Costs</h2>
         <form action="#" th:action="@{/insertFoodCost}" th:object="${foodcost}" method="post">
-            <p>Date: <input type="number" th:field="*{date}" required/></p>
-            <p>Back of House Food Cost: <input type="number" th:field="*{bohCost}"/></p>
-            <p>Front of House Food Cost: <input type="number" th:field="*{fohCost}"/></p>
+            <p>Date (YYYYMM): <input type="number" th:field="*{date}" min="202001" max="208012" required/></p>
+            <p>Back of House Food Cost: <input type="number" th:field="*{bohCost}" required/></p>
+            <p>Front of House Food Cost: <input type="number" th:field="*{fohCost}" required/></p>
             <p><input type="submit" value="Insert Food Costs"/></p>
-            <input type="button" th:onclick="location.href='/all'" value="Historic Food Costs"/>
         </form>
 
         
@@ -24,27 +23,26 @@
 
         <h2>Labor Costs</h2>
         <form action="#" th:action="@{/insertLaborCost}" th:object="${laborcost}" method="post">
-            <p>Date: <input type="number" th:field="*{date}" required/></p>
-            <p>Back of House Labor Cost: <input type="number" th:field="*{bohCost}"/></p>
-            <p>Front of House Labor Cost: <input type="number" th:field="*{fohCost}"/></p>
-            <p>Management Salary: <input type="number" th:field="*{mngrSalary}"/></p>
-            <p><input type="submit" value="Submit"/></p>
+            <p>Date (YYYYMM): <input type="number" th:field="*{date}" min="202001" max="208012" required/></p>
+            <p>Back of House Labor Cost: <input type="number" th:field="*{bohCost}" required/></p>
+            <p>Front of House Labor Cost: <input type="number" th:field="*{fohCost}" required/></p>
+            <p>Management Salary: <input type="number" th:field="*{mngrSalary}" required/></p>
+            <p><input type="submit" value="Insert Labor Costs"/></p>
         </form>
-        <button action="#" th:action="@{/all}" method="post">Historic Labor Costs</button>
         <hr>
 
         <h2>Other Expenses</h2>
         <form action="#" th:action="@{/insertExpense}" th:object="${expense}" method="post">
-            <p>Date: <input type="number" th:field="*{date}" required/></p>
+            <p>Date (YYYYMM): <input type="number" th:field="*{date}" min="202001" max="208012" required/></p>
             <p>Utility: <input type="number" th:field="*{utility}" required/></p>
             <p>Rent: <input type="number" th:field="*{rent}" required/></p>
-            <p>Marketing: <input type="number" th:field="*{marketing}" /></p>
-            <p>POS System: <input type="number" th:field="*{posSystem}" /></p>
-            <p>Accounting: <input type="number" th:field="*{accounting}" /></p>
-            <p>Equipment: <input type="number" th:field="*{equipment}" /></p>
-            <p>Maintainance: <input type="number" th:field="*{maintainance}" /></p>
-            <p><input type="submit" value="Submit"/></p>
+            <p>Marketing: <input type="number" th:field="*{marketing}" required/></p>
+            <p>POS System: <input type="number" th:field="*{posSystem}" required/></p>
+            <p>Accounting: <input type="number" th:field="*{accounting}" required/></p>
+            <p>Equipment: <input type="number" th:field="*{equipment}" required/></p>
+            <p>Maintainance: <input type="number" th:field="*{maintainance}" required/></p>
+            <p><input type="submit" value="Insert Expenses"/></p>
         </form>
-        <button action="#" th:action="@{/all}" method="post">Historic Expenses</button>
+        <button action="#" th:onclick="|window.location.href='/historicCosts'|">View Historic Costs</button>
     </body>
 </html>

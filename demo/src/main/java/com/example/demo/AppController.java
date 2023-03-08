@@ -19,18 +19,23 @@ public class AppController{
     private LaborCostRepository laborcostRepository;
     @Autowired
     private ExpenseRepository expenseRepository;
+    private Model addAttribute;
     
     @GetMapping(path="/home")
     public String home() {
       return "index";
     }
     
-    @GetMapping(path="/all")
-    @RequestMapping(value="/all", method = RequestMethod.GET)
+    @GetMapping(path="/historicCosts")
+    @RequestMapping(value="/historicCosts", method = RequestMethod.GET)
     public String viewAllCost(Model model){
       Iterable<FoodCost> foodcost = foodcostRepository.findAll();
+      Iterable<LaborCost> laborcost = laborcostRepository.findAll();
+      Iterable<Expense> expense = expenseRepository.findAll();
       model.addAttribute("foodcost", foodcost);
-      return "index";
+      model.addAttribute("laborcost", laborcost);
+      model.addAttribute("expense", expense);
+      return "historicCosts";
     }
 
     @GetMapping(path="/insertCost")
@@ -43,25 +48,19 @@ public class AppController{
     
     @PostMapping(path="/insertFoodCost")
     public String add(@ModelAttribute FoodCost foodcost, Model model){
-      FoodCost foodcost_inserted = foodcostRepository.save(foodcost);
-      model.addAttribute("boh_food_cost", foodcost_inserted.getBohCost());
-      model.addAttribute("foh_food_cost", foodcost_inserted.getFohCost());
+      foodcostRepository.save(foodcost);
       return "result";
     }
     
     @PostMapping(path="/insertLaborCost")
     public String add(@ModelAttribute LaborCost laborcost, Model model){
-      LaborCost laborcost_inserted = laborcostRepository.save(laborcost);
-      model.addAttribute("boh_labor_cost", laborcost_inserted.getBohCost());
-      model.addAttribute("foh_labor_cost", laborcost_inserted.getFohCost());
+      laborcostRepository.save(laborcost);
       return "result";
     }
 
     @PostMapping(path="/insertExpense")
     public String add(@ModelAttribute Expense expense, Model model){
-      Expense expense_inserted = expenseRepository.save(expense);
-      model.addAttribute("utility", expense_inserted.getUtility());
-      model.addAttribute("rent", expense_inserted.getRent());
+      expenseRepository.save(expense);
       return "result";
     }
 

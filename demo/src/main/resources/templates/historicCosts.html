@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Historic Cost Report</h1>
+        <table>
+            <thead>
+              <tr>
+                <th>Date (YYYYMM)</th>
+                <th>BOH Food Cost</th>
+                <th>FOH Food Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="foodcost : ${foodcost}">
+                <td th:text="${foodcost.date}"></td>
+                <td th:text="${foodcost.bohCost}"></td>
+                <td th:text="${foodcost.fohCost}"></td>
+              </tr>
+            </tbody>
+          </table>
+        <div id="container-foodcost" style="height: 450px; width: 80%;"></div>
+
+        <table>
+            <thead>
+              <tr>
+                <th>Date (YYYYMM)</th>
+                <th>BOH Labor Cost</th>
+                <th>FOH Labor Cost</th>
+                <th>Management Salary</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="laborcost : ${laborcost}">
+                <td th:text="${laborcost.date}"></td>
+                <td th:text="${laborcost.bohCost}"></td>
+                <td th:text="${laborcost.fohCost}"></td>
+                <td th:text="${laborcost.mngrSalary}"></td>
+              </tr>
+            </tbody>
+          </table>
+        <div id="container-laborcost" style="height: 450px; width: 80%;"></div>
+
+        <table>
+            <thead>
+              <tr>
+                <th>Date (YYYYMM)</th>
+                <th>Utility</th>
+                <th>Rent</th>
+                <th>Marketing</th>
+                <th>POS System</th>
+                <th>Accounting</th>
+                <th>Equipment</th>
+                <th>Maintainance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="expense : ${expense}">
+                <td th:text="${expense.date}"></td>
+                <td th:text="${expense.utility}"></td>
+                <td th:text="${expense.rent}"></td>
+                <td th:text="${expense.marketing}"></td>
+                <td th:text="${expense.posSystem}"></td>
+                <td th:text="${expense.accounting}"></td>
+                <td th:text="${expense.equipment}"></td>
+                <td th:text="${expense.maintainance}"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="container-expense" style="height: 450px; width: 80%;"></div>
+
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            var foodAttribute = /*[[${foodcost}]]*/ '';
+            /*]]>*/
+            console.log(foodAttribute)
+            foodcost_x = foodAttribute.map(x=>x["date"])
+            foodcost_y1 = foodAttribute.map(x=>x["bohCost"])
+            foodcost_y2 = foodAttribute.map(x=>x["fohCost"])
+            console.log(foodcost_x)
+            console.log(foodcost_y1)
+            Highcharts.chart('container-foodcost',{
+                chart: {
+                    type: 'line',
+                    width: 500
+                },
+                title: {
+                    text: 'Food Cost'
+                },
+                xAxis: {
+                    categories: foodcost_x
+                },
+                tooltip: {
+                    formatter: function(){
+                        console.log(this);
+                    }
+                },
+                series: [{
+                        name: "BOH food cost", 
+                        data: foodcost_y1
+                    },{
+                        name: "FOH food cost",
+                        data: foodcost_y2
+                }]
+                });
+                
+            /*<![CDATA[*/
+            var laborAttribute = /*[[${laborcost}]]*/ '';
+            /*]]>*/
+            console.log(laborAttribute)
+            laborcost_x = laborAttribute.map(x=>x["date"])
+            laborcost_y1 = laborAttribute.map(x=>x["bohCost"])
+            laborcost_y2 = laborAttribute.map(x=>x["fohCost"])
+            laborcost_y3 = laborAttribute.map(x=>x["mngrSalary"])
+            console.log(foodcost_x)
+            console.log(foodcost_y1)
+            Highcharts.chart('container-laborcost',{
+                chart: {
+                    type: 'line',
+                    width: 500
+                },
+                title: {
+                    text: 'Labor Cost'
+                },
+                xAxis: {
+                    categories: laborcost_x
+                },
+                tooltip: {
+                    formatter: function(){
+                        console.log(this);
+                    }
+                },
+                series: [{
+                        name: "BOH food cost", 
+                        data: laborcost_y1
+                    },{
+                        name: "FOH food cost",
+                        data: laborcost_y2
+                    },{
+                        name: "Management Salary",
+                        data: laborcost_y3
+                }]
+                });
+
+            /*<![CDATA[*/
+            var expenseAttribute = /*[[${expense}]]*/ '';
+            /*]]>*/
+            console.log(expenseAttribute)
+            expense_x = expenseAttribute.map(x=>x["date"])
+            expense_y1 = expenseAttribute.map(x=>x["maintainance"])
+            expense_y2 = expenseAttribute.map(x=>x["accounting"])
+            expense_y3 = expenseAttribute.map(x=>x["equipment"])
+            console.log(expense_x)
+            console.log(expense_y1)
+            Highcharts.chart('container-expense',{
+                chart: {
+                    type: 'line',
+                    width: 500
+                },
+                title: {
+                    text: 'Other Expenses'
+                },
+                xAxis: {
+                    categories: expense_x
+                },
+                tooltip: {
+                    formatter: function(){
+                        console.log(this);
+                    }
+                },
+                series: [{
+                        name: "Maintainance", 
+                        data: expense_y1
+                    },{
+                        name: "Accounting",
+                        data: expense_y2
+                    },{
+                        name: "Equipment",
+                        data: expense_y3
+                }]
+                });
+        </script>
+        </th:block>
+    </body>
+</html>
